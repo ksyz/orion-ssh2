@@ -1,0 +1,60 @@
+<!-- Ant Build file -->
+<project name="Orion SSH2" basedir="." default="build.all">
+
+	<property name="src.dir" value="src"/>		
+	<property name="class.dir" value="classes"/>
+	<property name="base.package" value="com.trilead"/>
+	
+    <target name="compile">
+		<javac srcdir="${src.dir}" 
+		       destdir="${class.dir}" 
+		       debug="true" 
+		       debuglevel="lines,vars,source" 
+		       target="1.4" 
+		       source="1.4"/>
+    </target>
+    
+    <target name="build.jar" depends="compile">
+		<jar destfile="orion-ssh2.jar">
+			<fileset dir="${class.dir}">
+				<exclude name="**/.svn"/>
+			</fileset>
+			<fileset file="LICENSE.txt" />
+		</jar>    
+    </target>        
+    
+    <target name="java.doc" depends="compile">
+		  <javadoc packagenames="${base.package}.*"
+		           sourcepath="src"
+		           defaultexcludes="yes"
+		           destdir="javadoc"
+		           author="true"
+		           version="true"
+		           use="true"
+		           overview="overview.html"
+		           windowtitle="Orion SSH-2 for Java">
+		    <doctitle><![CDATA[<h1>Orion SSH-2 for Java</h1>]]></doctitle>
+		    <header>abcdef</header>
+		    <bottom>1232432</bottom>
+		    <tag name="todo" scope="all" description="To do:"/>
+<!-- 		    
+		    <bottom><![CDATA[<i>Copyright &#169; 2000 Dummy Corp. All Rights Reserved.</i>]]></bottom>
+		    <tag name="todo" scope="all" description="To do:"/>
+		    <group title="Group 1 Packages" packages="com.dummy.test.a*"/>
+		    <group title="Group 2 Packages" packages="com.dummy.test.b*:com.dummy.test.c*"/>
+		    
+		    <link offline="true" href="http://java.sun.com/j2se/1.5.0/docs/api/" packagelistLoc="C:\tmp"/>
+		    <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
+-->		    
+		  </javadoc>
+    </target>
+        
+	<target name="build.all" depends="build.jar" />    
+	
+	
+	<target name="build.clean">	
+		<delete dir="${class.dir}" />
+		<mkdir dir="${class.dir}"/>
+	</target>
+     
+</project>
