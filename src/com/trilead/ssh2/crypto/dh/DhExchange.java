@@ -1,12 +1,12 @@
 
 package com.trilead.ssh2.crypto.dh;
 
+import com.trilead.ssh2.crypto.digest.HashForSSH2Types;
+import com.trilead.ssh2.log.Logger;
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-
-import com.trilead.ssh2.crypto.digest.HashForSSH2Types;
-import com.trilead.ssh2.log.Logger;
 
 
 /**

@@ -1,13 +1,13 @@
 
 package com.trilead.ssh2;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import com.trilead.ssh2.channel.Channel;
 import com.trilead.ssh2.channel.ChannelManager;
 import com.trilead.ssh2.channel.LocalAcceptThread;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 
 /**

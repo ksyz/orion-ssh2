@@ -1,12 +1,12 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import com.trilead.ssh2.Connection;
 import com.trilead.ssh2.HTTPProxyData;
 import com.trilead.ssh2.Session;
 import com.trilead.ssh2.StreamGobbler;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * This is a very basic example that shows

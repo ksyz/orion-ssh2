@@ -1,23 +1,6 @@
 
 package com.trilead.ssh2.transport;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.security.SecureRandom;
-import java.util.Vector;
-
-import com.trilead.ssh2.ConnectionInfo;
-import com.trilead.ssh2.ConnectionMonitor;
-import com.trilead.ssh2.DHGexParameters;
-import com.trilead.ssh2.HTTPProxyData;
-import com.trilead.ssh2.HTTPProxyException;
-import com.trilead.ssh2.ProxyData;
-import com.trilead.ssh2.ServerHostKeyVerifier;
 import com.trilead.ssh2.crypto.Base64;
 import com.trilead.ssh2.crypto.CryptoWishList;
 import com.trilead.ssh2.crypto.cipher.BlockCipher;
@@ -27,6 +10,13 @@ import com.trilead.ssh2.packets.PacketDisconnect;
 import com.trilead.ssh2.packets.Packets;
 import com.trilead.ssh2.packets.TypesReader;
 import com.trilead.ssh2.util.Tokenizer;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.security.SecureRandom;
+import java.util.Vector;
 
 
 /*

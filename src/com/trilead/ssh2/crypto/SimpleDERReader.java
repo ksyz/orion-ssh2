@@ -1,7 +1,6 @@
 package com.trilead.ssh2.crypto;
 
 import java.io.IOException;
-
 import java.math.BigInteger;
 
 /**

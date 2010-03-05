@@ -1,9 +1,6 @@
 
 package com.trilead.ssh2.transport;
 
-import java.io.IOException;
-import java.security.SecureRandom;
-
 import com.trilead.ssh2.ConnectionInfo;
 import com.trilead.ssh2.DHGexParameters;
 import com.trilead.ssh2.ServerHostKeyVerifier;
@@ -15,22 +12,11 @@ import com.trilead.ssh2.crypto.dh.DhExchange;
 import com.trilead.ssh2.crypto.dh.DhGroupExchange;
 import com.trilead.ssh2.crypto.digest.MAC;
 import com.trilead.ssh2.log.Logger;
-import com.trilead.ssh2.packets.PacketKexDHInit;
-import com.trilead.ssh2.packets.PacketKexDHReply;
-import com.trilead.ssh2.packets.PacketKexDhGexGroup;
-import com.trilead.ssh2.packets.PacketKexDhGexInit;
-import com.trilead.ssh2.packets.PacketKexDhGexReply;
-import com.trilead.ssh2.packets.PacketKexDhGexRequest;
-import com.trilead.ssh2.packets.PacketKexDhGexRequestOld;
-import com.trilead.ssh2.packets.PacketKexInit;
-import com.trilead.ssh2.packets.PacketNewKeys;
-import com.trilead.ssh2.packets.Packets;
-import com.trilead.ssh2.signature.DSAPublicKey;
-import com.trilead.ssh2.signature.DSASHA1Verify;
-import com.trilead.ssh2.signature.DSASignature;
-import com.trilead.ssh2.signature.RSAPublicKey;
-import com.trilead.ssh2.signature.RSASHA1Verify;
-import com.trilead.ssh2.signature.RSASignature;
+import com.trilead.ssh2.packets.*;
+import com.trilead.ssh2.signature.*;
+
+import java.io.IOException;
+import java.security.SecureRandom;
 
 
 /**

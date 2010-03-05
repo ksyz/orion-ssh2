@@ -1,32 +1,16 @@
 
 package com.trilead.ssh2.auth;
 
+import com.trilead.ssh2.InteractiveCallback;
+import com.trilead.ssh2.crypto.PEMDecoder;
+import com.trilead.ssh2.packets.*;
+import com.trilead.ssh2.signature.*;
+import com.trilead.ssh2.transport.MessageHandler;
+import com.trilead.ssh2.transport.TransportManager;
+
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Vector;
-
-import com.trilead.ssh2.InteractiveCallback;
-import com.trilead.ssh2.crypto.PEMDecoder;
-import com.trilead.ssh2.packets.PacketServiceAccept;
-import com.trilead.ssh2.packets.PacketServiceRequest;
-import com.trilead.ssh2.packets.PacketUserauthBanner;
-import com.trilead.ssh2.packets.PacketUserauthFailure;
-import com.trilead.ssh2.packets.PacketUserauthInfoRequest;
-import com.trilead.ssh2.packets.PacketUserauthInfoResponse;
-import com.trilead.ssh2.packets.PacketUserauthRequestInteractive;
-import com.trilead.ssh2.packets.PacketUserauthRequestNone;
-import com.trilead.ssh2.packets.PacketUserauthRequestPassword;
-import com.trilead.ssh2.packets.PacketUserauthRequestPublicKey;
-import com.trilead.ssh2.packets.Packets;
-import com.trilead.ssh2.packets.TypesWriter;
-import com.trilead.ssh2.signature.DSAPrivateKey;
-import com.trilead.ssh2.signature.DSASHA1Verify;
-import com.trilead.ssh2.signature.DSASignature;
-import com.trilead.ssh2.signature.RSAPrivateKey;
-import com.trilead.ssh2.signature.RSASHA1Verify;
-import com.trilead.ssh2.signature.RSASignature;
-import com.trilead.ssh2.transport.MessageHandler;
-import com.trilead.ssh2.transport.TransportManager;
 
 
 /**

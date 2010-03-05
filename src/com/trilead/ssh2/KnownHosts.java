@@ -1,21 +1,6 @@
 
 package com.trilead.ssh2;
 
-import java.io.BufferedReader;
-import java.io.CharArrayReader;
-import java.io.CharArrayWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.io.UnsupportedEncodingException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.security.SecureRandom;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Vector;
-
 import com.trilead.ssh2.crypto.Base64;
 import com.trilead.ssh2.crypto.digest.Digest;
 import com.trilead.ssh2.crypto.digest.HMAC;
@@ -25,6 +10,14 @@ import com.trilead.ssh2.signature.DSAPublicKey;
 import com.trilead.ssh2.signature.DSASHA1Verify;
 import com.trilead.ssh2.signature.RSAPublicKey;
 import com.trilead.ssh2.signature.RSASHA1Verify;
+
+import java.io.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.security.SecureRandom;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Vector;
 
 
 /**

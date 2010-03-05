@@ -1,11 +1,11 @@
 
 package com.trilead.ssh2.packets;
 
-import java.io.IOException;
-import java.security.SecureRandom;
-
 import com.trilead.ssh2.crypto.CryptoWishList;
 import com.trilead.ssh2.transport.KexParameters;
+
+import java.io.IOException;
+import java.security.SecureRandom;
 
 
 /**

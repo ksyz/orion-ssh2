@@ -1,10 +1,10 @@
 
 package com.trilead.ssh2.packets;
 
+import com.trilead.ssh2.util.Tokenizer;
+
 import java.io.IOException;
 import java.math.BigInteger;
-
-import com.trilead.ssh2.util.Tokenizer;
 
 
 /**

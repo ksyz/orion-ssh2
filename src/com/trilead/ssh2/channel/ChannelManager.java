@@ -1,29 +1,15 @@
 
 package com.trilead.ssh2.channel;
 
+import com.trilead.ssh2.ChannelCondition;
+import com.trilead.ssh2.log.Logger;
+import com.trilead.ssh2.packets.*;
+import com.trilead.ssh2.transport.MessageHandler;
+import com.trilead.ssh2.transport.TransportManager;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Vector;
-
-import com.trilead.ssh2.ChannelCondition;
-import com.trilead.ssh2.log.Logger;
-import com.trilead.ssh2.packets.PacketChannelOpenConfirmation;
-import com.trilead.ssh2.packets.PacketChannelOpenFailure;
-import com.trilead.ssh2.packets.PacketChannelTrileadPing;
-import com.trilead.ssh2.packets.PacketGlobalCancelForwardRequest;
-import com.trilead.ssh2.packets.PacketGlobalForwardRequest;
-import com.trilead.ssh2.packets.PacketGlobalTrileadPing;
-import com.trilead.ssh2.packets.PacketOpenDirectTCPIPChannel;
-import com.trilead.ssh2.packets.PacketOpenSessionChannel;
-import com.trilead.ssh2.packets.PacketSessionExecCommand;
-import com.trilead.ssh2.packets.PacketSessionPtyRequest;
-import com.trilead.ssh2.packets.PacketSessionStartShell;
-import com.trilead.ssh2.packets.PacketSessionSubsystemRequest;
-import com.trilead.ssh2.packets.PacketSessionX11Request;
-import com.trilead.ssh2.packets.Packets;
-import com.trilead.ssh2.packets.TypesReader;
-import com.trilead.ssh2.transport.MessageHandler;
-import com.trilead.ssh2.transport.TransportManager;
 
 /**
  * ChannelManager. Please read the comments in Channel.java.

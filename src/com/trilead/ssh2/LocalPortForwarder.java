@@ -1,11 +1,11 @@
 
 package com.trilead.ssh2;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-
 import com.trilead.ssh2.channel.ChannelManager;
 import com.trilead.ssh2.channel.LocalAcceptThread;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
 
 
 /**

@@ -1,12 +1,12 @@
 
 package com.trilead.ssh2.transport;
 
+import com.trilead.ssh2.Connection;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-
-import com.trilead.ssh2.Connection;
 
 /**
  * ClientServerHello.

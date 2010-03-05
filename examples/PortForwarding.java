@@ -1,8 +1,8 @@
-import java.io.File;
-import java.io.IOException;
-
 import com.trilead.ssh2.Connection;
 import com.trilead.ssh2.LocalPortForwarder;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * This example shows how to deal with port forwardings.

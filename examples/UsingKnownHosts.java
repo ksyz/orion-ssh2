@@ -1,13 +1,9 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import com.trilead.ssh2.Connection;
 import com.trilead.ssh2.KnownHosts;
 import com.trilead.ssh2.Session;
 import com.trilead.ssh2.StreamGobbler;
+
+import java.io.*;
 
 /**
  * This example shows how to deal with "known_hosts" files.

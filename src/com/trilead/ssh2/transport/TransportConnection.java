@@ -1,11 +1,6 @@
 
 package com.trilead.ssh2.transport;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.SecureRandom;
-
 import com.trilead.ssh2.crypto.cipher.BlockCipher;
 import com.trilead.ssh2.crypto.cipher.CipherInputStream;
 import com.trilead.ssh2.crypto.cipher.CipherOutputStream;
@@ -13,6 +8,11 @@ import com.trilead.ssh2.crypto.cipher.NullCipher;
 import com.trilead.ssh2.crypto.digest.MAC;
 import com.trilead.ssh2.log.Logger;
 import com.trilead.ssh2.packets.Packets;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.SecureRandom;
 
 
 /**

@@ -1,6 +1,19 @@
 
 package com.trilead.ssh2;
 
+import com.trilead.ssh2.auth.AuthenticationManager;
+import com.trilead.ssh2.channel.ChannelManager;
+import com.trilead.ssh2.crypto.CryptoWishList;
+import com.trilead.ssh2.crypto.cipher.BlockCipherFactory;
+import com.trilead.ssh2.crypto.digest.MAC;
+import com.trilead.ssh2.log.Logger;
+import com.trilead.ssh2.packets.PacketIgnore;
+import com.trilead.ssh2.transport.ClientServerHello;
+import com.trilead.ssh2.transport.KexManager;
+import com.trilead.ssh2.transport.TransportManager;
+import com.trilead.ssh2.util.TimeoutService;
+import com.trilead.ssh2.util.TimeoutService.TimeoutToken;
+
 import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.FileReader;
@@ -9,18 +22,6 @@ import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
 import java.security.SecureRandom;
 import java.util.Vector;
-
-import com.trilead.ssh2.auth.AuthenticationManager;
-import com.trilead.ssh2.channel.ChannelManager;
-import com.trilead.ssh2.crypto.CryptoWishList;
-import com.trilead.ssh2.crypto.cipher.BlockCipherFactory;
-import com.trilead.ssh2.crypto.digest.MAC;
-import com.trilead.ssh2.log.Logger;
-import com.trilead.ssh2.packets.PacketIgnore;
-import com.trilead.ssh2.transport.KexManager;
-import com.trilead.ssh2.transport.TransportManager;
-import com.trilead.ssh2.util.TimeoutService;
-import com.trilead.ssh2.util.TimeoutService.TimeoutToken;
 
 /**
  * A <code>Connection</code> is used to establish an encrypted TCP/IP
@@ -1495,4 +1496,8 @@ public class Connection
 
 		cm.requestGlobalTrileadPing();
 	}
+
+    public ClientServerHello getClientServerHello() {
+        return tm == null ? null : tm.getClientServerHello();
+    }
 }

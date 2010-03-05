@@ -1,14 +1,14 @@
 
 package com.trilead.ssh2.signature;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.security.SecureRandom;
-
 import com.trilead.ssh2.crypto.digest.SHA1;
 import com.trilead.ssh2.log.Logger;
 import com.trilead.ssh2.packets.TypesReader;
 import com.trilead.ssh2.packets.TypesWriter;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 
 
 /**

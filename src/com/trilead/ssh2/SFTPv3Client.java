@@ -1,20 +1,16 @@
 
 package com.trilead.ssh2;
 
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Vector;
-
 import com.trilead.ssh2.packets.TypesReader;
 import com.trilead.ssh2.packets.TypesWriter;
 import com.trilead.ssh2.sftp.AttribFlags;
 import com.trilead.ssh2.sftp.ErrorCodes;
 import com.trilead.ssh2.sftp.Packet;
+
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Vector;
 
 
 /**

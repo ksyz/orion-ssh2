@@ -2,9 +2,9 @@
 package com.trilead.ssh2.crypto;
 
 
-import java.math.BigInteger;
-
 import com.trilead.ssh2.crypto.digest.HashForSSH2Types;
+
+import java.math.BigInteger;
 
 /**
  * Establishes key material for iv/key/mac (both directions).

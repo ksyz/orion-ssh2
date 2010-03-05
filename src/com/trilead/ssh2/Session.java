@@ -1,14 +1,14 @@
 
 package com.trilead.ssh2;
 
+import com.trilead.ssh2.channel.Channel;
+import com.trilead.ssh2.channel.ChannelManager;
+import com.trilead.ssh2.channel.X11ServerData;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.SecureRandom;
-
-import com.trilead.ssh2.channel.Channel;
-import com.trilead.ssh2.channel.ChannelManager;
-import com.trilead.ssh2.channel.X11ServerData;
 
 
 /**

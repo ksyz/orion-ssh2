@@ -1,12 +1,12 @@
 
 package com.trilead.ssh2.channel;
 
+import com.trilead.ssh2.log.Logger;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-
-import com.trilead.ssh2.log.Logger;
 
 
 /**

@@ -1,9 +1,9 @@
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.trilead.ssh2.ChannelCondition;
 import com.trilead.ssh2.Connection;
 import com.trilead.ssh2.Session;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * This example shows how to use the Session.waitForCondition

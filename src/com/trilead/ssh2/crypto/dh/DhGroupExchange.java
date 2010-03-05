@@ -1,11 +1,11 @@
 
 package com.trilead.ssh2.crypto.dh;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
-
 import com.trilead.ssh2.DHGexParameters;
 import com.trilead.ssh2.crypto.digest.HashForSSH2Types;
+
+import java.math.BigInteger;
+import java.security.SecureRandom;
 
 
 /**

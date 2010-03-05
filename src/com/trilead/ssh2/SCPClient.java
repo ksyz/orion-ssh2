@@ -1,14 +1,7 @@
 
 package com.trilead.ssh2;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * A very basic <code>SCPClient</code> that can be used to copy files from/to

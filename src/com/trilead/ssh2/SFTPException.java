@@ -1,9 +1,9 @@
 
 package com.trilead.ssh2;
 
-import java.io.IOException;
-
 import com.trilead.ssh2.sftp.ErrorCodes;
+
+import java.io.IOException;
 
 
 /**

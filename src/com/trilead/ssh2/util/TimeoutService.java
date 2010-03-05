@@ -1,12 +1,12 @@
 
 package com.trilead.ssh2.util;
 
+import com.trilead.ssh2.log.Logger;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.LinkedList;
-
-import com.trilead.ssh2.log.Logger;
 
 
 /**
