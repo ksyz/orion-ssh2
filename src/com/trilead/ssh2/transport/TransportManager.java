@@ -114,7 +114,7 @@ public class TransportManager
 
 	String hostname;
 	int port;
-	final Socket sock = new Socket();
+	Socket sock = new Socket();
 
 	Object connectionSemaphore = new Object();
 
@@ -132,6 +132,7 @@ public class TransportManager
 
 	Vector connectionMonitors = new Vector();
 	boolean monitorsWereInformed = false;
+	private ClientServerHello myCsh;
 
 	/**
 	 * There were reports that there are JDKs which use
@@ -143,7 +144,7 @@ public class TransportManager
 	 * @return the InetAddress
 	 * @throws UnknownHostException
 	 */
-	private InetAddress createInetAddress(String host) throws UnknownHostException
+	static InetAddress createInetAddress(String host) throws UnknownHostException
 	{
 		/* Check if it is a dotted IP4 address */
 
@@ -155,7 +156,7 @@ public class TransportManager
 		return InetAddress.getByName(host);
 	}
 
-	private InetAddress parseIPv4Address(String host) throws UnknownHostException
+	private static InetAddress parseIPv4Address(String host) throws UnknownHostException
 	{
 		if (host == null)
 			return null;
@@ -321,133 +322,23 @@ public class TransportManager
 		}
 	}
 
-	private void establishConnection(ProxyData proxyData, int connectTimeout) throws IOException
-	{
-		/* See the comment for createInetAddress() */
-
-		if (proxyData == null)
-		{
-			InetAddress addr = createInetAddress(hostname);
-			sock.connect(new InetSocketAddress(addr, port), connectTimeout);
-			sock.setSoTimeout(0);
-			return;
-		}
-
-		if (proxyData instanceof HTTPProxyData)
-		{
-			HTTPProxyData pd = (HTTPProxyData) proxyData;
-
-			/* At the moment, we only support HTTP proxies */
-
-			InetAddress addr = createInetAddress(pd.proxyHost);
-			sock.connect(new InetSocketAddress(addr, pd.proxyPort), connectTimeout);
-			sock.setSoTimeout(0);
-
-			/* OK, now tell the proxy where we actually want to connect to */
-
-			StringBuffer sb = new StringBuffer();
-
-			sb.append("CONNECT ");
-			sb.append(hostname);
-			sb.append(':');
-			sb.append(port);
-			sb.append(" HTTP/1.0\r\n");
-
-			if ((pd.proxyUser != null) && (pd.proxyPass != null))
-			{
-				String credentials = pd.proxyUser + ":" + pd.proxyPass;
-				char[] encoded = Base64.encode(credentials.getBytes("ISO-8859-1"));
-				sb.append("Proxy-Authorization: Basic ");
-				sb.append(encoded);
-				sb.append("\r\n");
-			}
-
-			if (pd.requestHeaderLines != null)
-			{
-				for (int i = 0; i < pd.requestHeaderLines.length; i++)
-				{
-					if (pd.requestHeaderLines[i] != null)
-					{
-						sb.append(pd.requestHeaderLines[i]);
-						sb.append("\r\n");
-					}
-				}
-			}
-
-			sb.append("\r\n");
-
-			OutputStream out = sock.getOutputStream();
-
-			out.write(sb.toString().getBytes("ISO-8859-1"));
-			out.flush();
-
-			/* Now parse the HTTP response */
-
-			byte[] buffer = new byte[1024];
-			InputStream in = sock.getInputStream();
-
-			int len = ClientServerHello.readLineRN(in, buffer);
-
-			String httpReponse = new String(buffer, 0, len, "ISO-8859-1");
-
-			if (httpReponse.startsWith("HTTP/") == false)
-				throw new IOException("The proxy did not send back a valid HTTP response.");
-
-			/* "HTTP/1.X XYZ X" => 14 characters minimum */
-
-			if ((httpReponse.length() < 14) || (httpReponse.charAt(8) != ' ') || (httpReponse.charAt(12) != ' '))
-				throw new IOException("The proxy did not send back a valid HTTP response.");
-
-			int errorCode = 0;
-
-			try
-			{
-				errorCode = Integer.parseInt(httpReponse.substring(9, 12));
-			}
-			catch (NumberFormatException ignore)
-			{
-				throw new IOException("The proxy did not send back a valid HTTP response.");
-			}
-
-			if ((errorCode < 0) || (errorCode > 999))
-				throw new IOException("The proxy did not send back a valid HTTP response.");
-
-			if (errorCode != 200)
-			{
-				throw new HTTPProxyException(httpReponse.substring(13), errorCode);
-			}
-
-			/* OK, read until empty line */
-
-			while (true)
-			{
-				len = ClientServerHello.readLineRN(in, buffer);
-				if (len == 0)
-					break;
-			}
-			return;
-		}
-
-		throw new IOException("Unsupported ProxyData");
-	}
-
 	public void initialize(CryptoWishList cwl, ServerHostKeyVerifier verifier, DHGexParameters dhgex,
 			int connectTimeout, SecureRandom rnd, ProxyData proxyData) throws IOException
 	{
 		/* First, establish the TCP connection to the SSH-2 server */
 
-		establishConnection(proxyData, connectTimeout);
+		sock = SocketFactory.open(hostname, port, proxyData, connectTimeout);
 
 		/* Parse the server line and say hello - important: this information is later needed for the
 		 * key exchange (to stop man-in-the-middle attacks) - that is why we wrap it into an object
 		 * for later use.
 		 */
 
-		ClientServerHello csh = new ClientServerHello(sock.getInputStream(), sock.getOutputStream());
+		myCsh = new ClientServerHello(sock.getInputStream(), sock.getOutputStream());
 
 		tc = new TransportConnection(sock.getInputStream(), sock.getOutputStream(), rnd);
 
-		km = new KexManager(this, csh, cwl, hostname, port, verifier, rnd);
+		km = new KexManager(this, myCsh, cwl, hostname, port, verifier, rnd);
 		km.initiateKEX(cwl, dhgex);
 
 		receiveThread = new Thread(new Runnable()
@@ -762,5 +653,9 @@ public class TransportManager
 
 			mh.handleMessage(msg, msglen);
 		}
+	}
+
+	public ClientServerHello getClientServerHello() {
+		return myCsh;
 	}
 }
