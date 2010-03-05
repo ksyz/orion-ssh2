@@ -4,8 +4,12 @@
 	<property name="src.dir" value="src"/>		
 	<property name="class.dir" value="classes"/>
 	<property name="base.package" value="com.trilead"/>
-	
-    <target name="compile">
+
+	<target name="prepare">
+		<mkdir  dir="${class.dir}"/>
+	</target>
+
+    <target name="compile" depends="prepare">
 		<javac srcdir="${src.dir}" 
 		       destdir="${class.dir}" 
 		       debug="true" 

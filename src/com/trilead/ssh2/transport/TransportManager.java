@@ -10,6 +10,11 @@ import com.trilead.ssh2.packets.PacketDisconnect;
 import com.trilead.ssh2.packets.Packets;
 import com.trilead.ssh2.packets.TypesReader;
 import com.trilead.ssh2.util.Tokenizer;
+import com.trilead.ssh2.ConnectionInfo;
+import com.trilead.ssh2.ConnectionMonitor;
+import com.trilead.ssh2.DHGexParameters;
+import com.trilead.ssh2.ProxyData;
+import com.trilead.ssh2.ServerHostKeyVerifier;
 
 import java.io.IOException;
 import java.net.InetAddress;
