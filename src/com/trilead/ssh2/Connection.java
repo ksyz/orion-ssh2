@@ -13,6 +13,7 @@ import com.trilead.ssh2.transport.KexManager;
 import com.trilead.ssh2.transport.TransportManager;
 import com.trilead.ssh2.util.TimeoutService;
 import com.trilead.ssh2.util.TimeoutService.TimeoutToken;
+import com.trilead.ssh2.transport.GenericTransportManager;
 
 import java.io.CharArrayWriter;
 import java.io.File;
@@ -89,6 +90,7 @@ public class Connection
 
 	private AuthenticationManager am;
 
+
 	private boolean authenticated = false;
 	private ChannelManager cm;
 
@@ -100,7 +102,7 @@ public class Connection
 
 	private final int port;
 
-	private TransportManager tm;
+	private GenericTransportManager tm;
 
 	private boolean tcpNoDelay = false;
 
@@ -193,7 +195,52 @@ public class Connection
 
 		return authenticated;
 	}
+	
+	/**
+	 * After a successful connect, one has to authenticate oneself. This method
+	 * allows you to test particular public key (f.e. if you need to prompt user
+	 * for passphrase, it is a good idea to try the key first). 
+	 * <p>
+	 * If the public key is accepted, <code>true</code> will be
+	 * returned. If the server does not accept the request, <code>false</code>
+	 * is returned and one can retry either by using this or any other
+	 * authentication method (use the <code>getRemainingAuthMethods</code>
+	 * method to get a list of the remaining possible methods).
+	 * 
+	 * @param user
+	 *            A <code>String</code> holding the username.
+	 * @param publicKey
+	 *            A <code>Object</code> containing the RSA or DSA public key
+	 *            (instances of DSAPublicKey or RSAPublicKey). You can
+	 *            get them in this format by using PublicKeyDecoder.
+	 *
+	 * @return whether the public key is accepted by the server.
+	 * @throws IOException
+	 * 
+	 */
+	public synchronized boolean tryPublicKey(String user, Object publicKey) throws IOException
+	{
+		if (tm == null)
+			throw new IllegalStateException("Connection is not established!");
 
+		if (authenticated)
+			throw new IllegalStateException("Connection is already authenticated!");
+
+		if (am == null)
+			am = new AuthenticationManager(tm);
+
+		if (cm == null)
+			cm = new ChannelManager(tm);
+
+		if (user == null)
+			throw new IllegalArgumentException("user argument is null");
+
+		if (publicKey == null)
+			throw new IllegalArgumentException("publicKey argument is null");
+
+		return am.tryPublicKey(user, publicKey);
+	}
+	
 	/**
 	 * A wrapper that calls
 	 * {@link #authenticateWithKeyboardInteractive(String, String[], InteractiveCallback)
@@ -578,6 +625,10 @@ public class Connection
 		return connect(verifier, 0, 0);
 	}
 
+        protected GenericTransportManager createTransportManager() throws IOException{
+            return new TransportManager(hostname, port);
+        }
+        
 	/**
 	 * Connect to the SSH-2 server and, as soon as the server has presented its
 	 * host key, use the
@@ -680,7 +731,7 @@ public class Connection
 
 		final TimeoutState state = new TimeoutState();
 
-		tm = new TransportManager(hostname, port);
+		tm = createTransportManager();
 
 		tm.setConnectionMonitors(connectionMonitors);
 
@@ -1382,6 +1433,20 @@ public class Connection
 			throw new IllegalArgumentException();
 
 		cm.requestGlobalForward(bindAddress, bindPort, targetAddress, targetPort);
+	}
+
+	
+        public void setAuthenticationManager(AuthenticationManager am) {
+            this.am = am;
+        }
+        
+        public GenericTransportManager getTransportManager() {
+    	    return tm;
+	}
+	
+	// TODO: This is a pretty ugly hack right now :(
+	public void setAuthenticated(boolean authenticated) {
+		this.authenticated = authenticated;
 	}
 
 	/**

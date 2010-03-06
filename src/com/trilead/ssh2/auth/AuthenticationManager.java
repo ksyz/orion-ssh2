@@ -6,7 +6,9 @@ import com.trilead.ssh2.crypto.PEMDecoder;
 import com.trilead.ssh2.packets.*;
 import com.trilead.ssh2.signature.*;
 import com.trilead.ssh2.transport.MessageHandler;
-import com.trilead.ssh2.transport.TransportManager;
+import com.trilead.ssh2.transport.GenericTransportManager;
+import com.trilead.ssh2.signature.DSAPublicKey;
+import com.trilead.ssh2.signature.RSAPublicKey;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -21,25 +23,25 @@ import java.util.Vector;
  */
 public class AuthenticationManager implements MessageHandler
 {
-	TransportManager tm;
+	protected GenericTransportManager tm;
 
 	Vector packets = new Vector();
 	boolean connectionClosed = false;
 
 	String banner;
 
-	String[] remainingMethods = new String[0];
-	boolean isPartialSuccess = false;
+	protected String[] remainingMethods = new String[0];
+	protected boolean isPartialSuccess = false;
 
-	boolean authenticated = false;
-	boolean initDone = false;
+	protected boolean authenticated = false;
+	protected boolean initDone = false;
 
-	public AuthenticationManager(TransportManager tm)
+	public AuthenticationManager(GenericTransportManager tm)
 	{
 		this.tm = tm;
 	}
 
-	boolean methodPossible(String methName)
+	protected boolean methodPossible(String methName)
 	{
 		if (remainingMethods == null)
 			return false;
@@ -77,7 +79,7 @@ public class AuthenticationManager implements MessageHandler
 		}
 	}
 
-	byte[] getNextMessage() throws IOException
+	protected byte[] getNextMessage() throws IOException
 	{
 		while (true)
 		{
@@ -103,7 +105,7 @@ public class AuthenticationManager implements MessageHandler
 		return isPartialSuccess;
 	}
 
-	private boolean initialize(String user) throws IOException
+	protected boolean initialize(String user) throws IOException
 	{
 		if (initDone == false)
 		{
@@ -246,7 +248,68 @@ public class AuthenticationManager implements MessageHandler
 			throw (IOException) new IOException("Publickey authentication failed.").initCause(e);
 		}
 	}
+	
+	public boolean tryPublicKey(String user, Object publicKey)
+			throws IOException
+	{
+		try
+		{
+			if (methodPossible("publickey") == false)
+				throw new IOException("Authentication method publickey not supported by the server at this stage.");
 
+			// TODO: register callback
+			
+			if (publicKey instanceof DSAPublicKey)
+			{
+				DSAPublicKey pk = (DSAPublicKey) publicKey;
+
+				byte[] pk_enc = DSASHA1Verify.encodeSSHDSAPublicKey(pk);
+
+				TypesWriter tw = new TypesWriter();
+
+				byte[] H = tm.getSessionIdentifier();
+
+				PacketUserauthRequestPublicKey ua = new PacketUserauthRequestPublicKey("ssh-connection", user,
+						"ssh-dss", pk_enc);
+				tm.sendMessage(ua.getPayload());
+			}
+			else if (publicKey instanceof RSAPublicKey)
+			{
+				RSAPublicKey pk = (RSAPublicKey) publicKey;
+
+				byte[] pk_enc = RSASHA1Verify.encodeSSHRSAPublicKey(pk);
+
+				PacketUserauthRequestPublicKey ua = new PacketUserauthRequestPublicKey("ssh-connection", user,
+						"ssh-rsa", pk_enc);
+				tm.sendMessage(ua.getPayload());
+			}
+			else
+			{
+				throw new IOException("Unknown public key type");
+			}
+
+			byte[] ar = getNextMessage();
+
+			if (ar[0] == Packets.SSH_MSG_USERAUTH_PK_OK)
+			{
+				return true;
+			}
+
+			if (ar[0] == Packets.SSH_MSG_USERAUTH_FAILURE)
+			{
+				return false;
+			}
+
+			throw new IOException("Unexpected SSH message (type " + ar[0] + ")");
+
+		}
+		catch (IOException e)
+		{
+			tm.close(e, false);
+			throw (IOException) new IOException("Publickey authentication failed.").initCause(e);
+		}
+	}
+	
 	public boolean authenticateNone(String user) throws IOException
 	{
 		try

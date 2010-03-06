@@ -116,7 +116,7 @@ public class PEMDecoder
 		return tmp;
 	}
 
-	private static final PEMStructure parsePEM(char[] pem) throws IOException
+	public static final PEMStructure parsePEM(char[] pem) throws IOException
 	{
 		PEMStructure ps = new PEMStructure();
 
@@ -304,10 +304,8 @@ public class PEMDecoder
 		return false;
 	}
 
-	public static Object decode(char[] pem, String password) throws IOException
+	public static Object decode(PEMStructure ps, String password) throws IOException
 	{
-		PEMStructure ps = parsePEM(pem);
-
 		if (isPEMEncrypted(ps))
 		{
 			if (password == null)
@@ -368,6 +366,11 @@ public class PEMDecoder
 		}
 
 		throw new IOException("PEM problem: it is of unknown type");
+	}
+		
+	public static Object decode(char[] pem, String password) throws IOException
+	{
+		return decode(parsePEM(pem), password);
 	}
 
 }

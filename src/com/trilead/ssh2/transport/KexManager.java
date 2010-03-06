@@ -42,7 +42,7 @@ public class KexManager
 
 	boolean ignore_next_kex_packet = false;
 
-	final TransportManager tm;
+	final GenericTransportManager tm;
 
 	CryptoWishList nextKEXcryptoWishList;
 	DHGexParameters nextKEXdhgexParameters;
@@ -52,7 +52,7 @@ public class KexManager
 	final int port;
 	final SecureRandom rnd;
 
-	public KexManager(TransportManager tm, ClientServerHello csh, CryptoWishList initialCwl, String hostname, int port,
+	public KexManager(GenericTransportManager tm, ClientServerHello csh, CryptoWishList initialCwl, String hostname, int port,
 			ServerHostKeyVerifier keyVerifier, SecureRandom rnd)
 	{
 		this.tm = tm;

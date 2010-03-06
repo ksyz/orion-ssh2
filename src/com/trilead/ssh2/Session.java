@@ -130,6 +130,44 @@ public class Session
 				terminal_modes);
 	}
 
+        
+	/**
+	 * Request window change.
+	 * <p>
+	 * This method may only be called after a program or shell is started
+         * in this session.
+	 * <p>
+	 * Zero dimension parameters are ignored. The character/row dimensions
+	 * override the pixel dimensions (when nonzero). Pixel dimensions refer to
+	 * the drawable area of the window. The dimension parameters are only
+	 * informational. 
+         *
+	 * @param term_width_characters
+	 *            terminal width, characters (e.g., 80)
+	 * @param term_height_characters
+	 *            terminal height, rows (e.g., 24)
+	 * @param term_width_pixels
+	 *            terminal width, pixels (e.g., 640)
+	 * @param term_height_pixels
+	 *            terminal height, pixels (e.g., 480)
+	 * @throws IOException
+	 */
+	public void requestWindowSizeChange(int term_width_characters, int term_height_characters, int term_width_pixels,
+			int term_height_pixels) throws IOException
+	{
+		synchronized (this)
+		{
+			/* The following is just a nicer error, we would catch it anyway later in the channel code */
+			if (flag_closed)
+				throw new IOException("This session is closed.");
+
+			if ((!flag_pty_requested) && (!flag_execution_started))
+				throw new IOException("Cannot change window size at this stage, PTY or command execution was not yet requested.");
+		}
+
+		cm.requestWindowSizeChange(cn, term_width_characters, term_height_characters, term_width_pixels, term_height_pixels);
+	}
+        
 	/**
 	 * Request X11 forwarding for the current session.
 	 * <p>

@@ -18,6 +18,7 @@ public class PacketUserauthRequestPublicKey
 	String pkAlgoName;
 	byte[] pk;
 	byte[] sig;
+	boolean haveSig;
 
 	public PacketUserauthRequestPublicKey(String serviceName, String user,
 			String pkAlgorithmName, byte[] pk, byte[] sig)
@@ -26,9 +27,20 @@ public class PacketUserauthRequestPublicKey
 		this.userName = user;
 		this.pkAlgoName = pkAlgorithmName;
 		this.pk = pk;
+		this.haveSig = true;
 		this.sig = sig;
 	}
-
+	
+	public PacketUserauthRequestPublicKey(String serviceName, String user,
+			String pkAlgorithmName, byte[] pk)
+	{
+		this.serviceName = serviceName;
+		this.userName = user;
+		this.pkAlgoName = pkAlgorithmName;
+		this.pk = pk;
+		this.haveSig = false;
+	}
+	
 	public PacketUserauthRequestPublicKey(byte payload[], int off, int len) throws IOException
 	{
 		this.payload = new byte[len];
@@ -54,10 +66,11 @@ public class PacketUserauthRequestPublicKey
 			tw.writeString(userName);
 			tw.writeString(serviceName);
 			tw.writeString("publickey");
-			tw.writeBoolean(true);
+			tw.writeBoolean(haveSig);
 			tw.writeString(pkAlgoName);
 			tw.writeString(pk, 0, pk.length);
-			tw.writeString(sig, 0, sig.length);
+			if (haveSig)
+				tw.writeString(sig, 0, sig.length);
 			payload = tw.getBytes();
 		}
 		return payload;

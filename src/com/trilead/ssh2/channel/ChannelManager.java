@@ -5,7 +5,7 @@ import com.trilead.ssh2.ChannelCondition;
 import com.trilead.ssh2.log.Logger;
 import com.trilead.ssh2.packets.*;
 import com.trilead.ssh2.transport.MessageHandler;
-import com.trilead.ssh2.transport.TransportManager;
+import com.trilead.ssh2.transport.GenericTransportManager;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ public class ChannelManager implements MessageHandler
 
 	private HashMap x11_magic_cookies = new HashMap();
 
-	private TransportManager tm;
+	private GenericTransportManager tm;
 
 	private Vector channels = new Vector();
 	private int nextLocalChannel = 100;
@@ -39,7 +39,7 @@ public class ChannelManager implements MessageHandler
 
 	private boolean listenerThreadsAllowed = true;
 
-	public ChannelManager(TransportManager tm)
+	public ChannelManager(GenericTransportManager tm)
 	{
 		this.tm = tm;
 		tm.registerMessageHandler(this, 80, 100);
@@ -840,6 +840,40 @@ public class ChannelManager implements MessageHandler
 			c.stderrWritepos += len;
 
 			c.notifyAll();
+		}
+	}
+
+	public void requestWindowSizeChange(Channel c, int term_width_characters, int term_height_characters,
+			int term_width_pixels, int term_height_pixels) throws IOException
+	{
+		PacketSessionWindowChangeRequest spr;
+
+		synchronized (c)
+		{
+			if (c.state != Channel.STATE_OPEN)
+				throw new IOException("Cannot change window size on this channel (" + c.getReasonClosed() + ")");
+
+			spr = new PacketSessionWindowChangeRequest(c.remoteID, true, term_width_characters, term_height_characters,
+					term_width_pixels, term_height_pixels);
+
+			c.successCounter = c.failedCounter = 0;
+		}
+
+		synchronized (c.channelSendLock)
+		{
+			if (c.closeMessageSent)
+				throw new IOException("Cannot change window size on this channel (" + c.getReasonClosed() + ")");
+			tm.sendMessage(spr.getPayload());
+		}
+
+		try
+		{
+			if (waitForChannelRequestResult(c) == false)
+				throw new IOException("The server denied the request.");
+                }
+		catch (IOException e)
+		{
+			throw (IOException) new IOException("Change window size request failed").initCause(e);
 		}
 	}
 

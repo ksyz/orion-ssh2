@@ -1,5 +1,6 @@
 package com.trilead.ssh2.signature;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
@@ -8,12 +9,15 @@ import java.math.BigInteger;
  * @author Christian Plattner, plattner@trilead.com
  * @version $Id: DSAPublicKey.java,v 1.1 2007/10/15 12:49:57 cplattne Exp $
  */
-public class DSAPublicKey
+public class DSAPublicKey implements Serializable
 {
 	private BigInteger p;
 	private BigInteger q;
 	private BigInteger g;
 	private BigInteger y;
+	
+	public DSAPublicKey() {
+	}
 
 	public DSAPublicKey(BigInteger p, BigInteger q, BigInteger g, BigInteger y)
 	{
