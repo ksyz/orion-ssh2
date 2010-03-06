@@ -43,7 +43,7 @@
     </target>
         
 	<target name="build.all" depends="build.jar" />    
-	
+	<target name="jar" depends="build.jar" />	
 	
 	<target name="build.clean">	
 		<delete dir="${class.dir}" />
