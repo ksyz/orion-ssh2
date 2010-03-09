@@ -4,12 +4,12 @@
 	<property name="src.dir" value="src"/>		
 	<property name="class.dir" value="classes"/>
 	<property name="base.package" value="com.trilead"/>
-
+	
 	<target name="prepare">
 		<mkdir  dir="${class.dir}"/>
 	</target>
 
-    <target name="compile" depends="prepare">
+    <target name="compile">
 		<javac srcdir="${src.dir}" 
 		       destdir="${class.dir}" 
 		       debug="true" 
@@ -42,12 +42,14 @@
 		  </javadoc>
     </target>
         
-	<target name="build.all" depends="build.jar" />    
-	<target name="jar" depends="build.jar" />	
+	<target name="build.all" depends="prepare,build.jar" />    
+	<target name="jar" depends="build.jar" />    
+	
 	
 	<target name="build.clean">	
 		<delete dir="${class.dir}" />
 		<mkdir dir="${class.dir}"/>
 	</target>
+	<target name="clean" depends="build.clean" />
      
 </project>
